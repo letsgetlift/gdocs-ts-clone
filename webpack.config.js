@@ -1,60 +1,24 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const TerserWebpackPlugin = require("terser-webpack-plugin");
-const OptimizeCssAssetPlugin = require("optimize-css-assets-webpack-plugin");
-
-const isDev = process.env.NODE_ENV === "development";
-const isProd = !isDev;
-
-const optimization = () => {
-  const config = {
-    splitChunks: {
-      chunks: "all",
-    },
-  };
-  if (isProd) {
-    config.minimizer = [
-      new OptimizeCssAssetPlugin(),
-      new TerserWebpackPlugin(),
-    ];
-  }
-  return config;
-};
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
 
 module.exports = {
-  entry: "./src/index.tsx",
+  context: path.resolve(__dirname, "src"),
   mode: "development",
+  entry: "./index.ts",
   module: {
     rules: [
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
-        options: { presets: ["@babel/env"] },
+        options: { presets: ["@babel/preset-env"] },
       },
       {
-        test: /\.(less|css)$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hnr: isDev,
-              reloadAll: true,
-            },
-          },
-          "css-loader",
-          "less-loader",
-        ],
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/i,
-        loader: "file-loader",
-        options: {
-          name: "[path][name].[ext]",
-        },
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
   },
@@ -64,25 +28,23 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/",
-    filename: "[name].[hash:8].js",
-  },
-  optimization: optimization(),
-  devServer: {
-    port: 3033,
-    index: "index.html",
-    historyApiFallback: true,
-    hot: isProd,
+    filename: "bundle.js",
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: filename("css"),
+    new HTMLWebpackPlugin({
+      template: path.resolve(__dirname, "public/index.html"),
     }),
-    new HtmlWebpackPlugin({
-      template: __dirname + "/public/index.html",
-      minify: {
-        collapseWhitespace: isProd,
-      },
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "assets/favicon.ico"),
+          to: path.resolve(__dirname, "dist"),
+        },
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: "bundle.css",
     }),
   ],
 };
