@@ -19,6 +19,7 @@
     "baseUrl": "./",
     "paths": {
       "src/*": ["./src/*"]
+//      "rootDirs": ["src/"]
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
