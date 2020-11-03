@@ -11,15 +11,15 @@
     "strict": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "src/*": ["./src/*"]
-//      "rootDirs": ["src/"]
+      "src/*": [
+        "./src/*"
+      ]
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -34,5 +34,8 @@
     "**/*.test.ts",
     "**/*.test.tsx"
   ],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
