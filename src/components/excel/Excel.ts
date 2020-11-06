@@ -5,7 +5,7 @@ export class Excel {
   $el: Element;
   components: Array<Types.IComponent>;
 
-  constructor(selector: string, options) {
+  constructor(selector: string, options: {[key: string]: Array<any>}) {
     this.$el = document.querySelector(selector)!;
     this.components = options.components || [];
   }
