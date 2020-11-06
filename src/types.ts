@@ -1,3 +1,4 @@
-export interface IComponent {
+export interface IComponent extends Object {
   toHTML(): string;
+  className: string;
 }

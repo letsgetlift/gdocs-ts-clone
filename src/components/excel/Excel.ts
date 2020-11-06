@@ -10,10 +10,11 @@ export class Excel {
     this.components = options.components || [];
   }
   
-  getRoot(): HTMLDivElement {
+  getRoot(): Element {
     const $root = $.create('div', 'excel');
     this.components.forEach((Component) => {
       const $el = $.create('div', Component.className);
+      //@ts-ignore
       const component: Types.IComponent = new Component($el);
       $el.innerHTML = component.toHTML();
       $root.append($el);
